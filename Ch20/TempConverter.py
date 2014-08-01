@@ -26,7 +26,7 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 
     def menuExit_selected(self):
         self.close()
-        
+#this is for you GitHub
 
 app = QtGui.QApplication(sys.argv)
 myWindow = MyWindowClass()
