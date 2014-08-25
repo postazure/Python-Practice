@@ -16,6 +16,7 @@
 #display "Game Over" and final stats
 
 import pygame, sys
+import time
 
 pygame.init()
 screen = pygame.display.set_mode([400,600])
@@ -34,6 +35,7 @@ thrust = 0
 delta_v = 0
 y_pos = 90
 held_down = False
+fuel_score = 0
 
 class ThrottleClass(pygame.sprite.Sprite):
     def __init__(self,location = [0,0]):
@@ -96,9 +98,11 @@ def display_final():
     if velocity > -5:
         final3 = "Nice Landing!"
         final4 = "NASA is hiring."
+        fuel_score = fuel + 1000
     elif velocity > -15:
         final3 = "Ouch! A bit rough, but you survived."
         final4 = "You'll live to try another day."
+        fuel_score = fuel
     else:
         final3 = "KABOOM!!!"
         final4 = "All your crew are dead."
@@ -117,6 +121,40 @@ def display_final():
     f4_surf = f4_font.render(final4,1, (255,255,255))
     screen.blit(f4_surf,[20,180])
     pygame.display.flip()
+    time.sleep(3000)
+    disp_high_score()
+    screen.fill([255,255,255])
+    pygame.display.flip()
+    score1_font = pygame.font.Font(None, 40)
+    score2_font = pygame.font.Font(None, 40)
+    score3_font = pygame.font.Font(None, 40)
+    scoreP_font = pygame.font.Font(None, 60)
+    score1_surf = score1_font.render(high_scores[0],1,(255,255,255))
+    score2_surf = score2_font.render(high_scores[1],1,(255,255,255))
+    score3_surf = score3_font.render(high_scores[2],1,(255,255,255))
+    scoreP_surf = scoreP_font.render(("Your Score: ", fuel_score),1,(255,255,255))
+    screen.blit(score1_surf, [20,50])
+    screen.blit(score2_surf, [20,110])
+    screen.blit(score3_surf, [20,150])
+    screen.blit(scoreP_surf, [20,180])
+    pygame.display.fliip()
+def disp_high_score():
+    high_scores = []
+    
+    hs_file = open("high_score.txt",'r')    
+    high_scores = hs_file.readlines()
+    high_scores = map(int, high_scores)
+    hs_file.close()
+
+    high_scores.append(int(fuel_score))
+    high_scores.sort()
+    high_scores.reverse()
+        
+    del high_scores[3]
+    hs_file = open("high_score.txt",'w')
+    for scores in high_scores:
+        hs_file.write(str(scores) + '\n')
+    hs_file.close
 
 
 myThrottle = ThrottleClass([15,500])

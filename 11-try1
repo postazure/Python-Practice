@@ -1,0 +1,11 @@
+#11 1)Try it
+
+import time
+timeLength = int(raw_input("How long until Blast Off?"))
+for i in range (timeLength, 0, -1):
+    print i,
+    for i in range (1,i+1):
+        print "*",
+    print
+    time.sleep(1)
+print "BLAST OFF!"
